@@ -1,30 +1,34 @@
 #include <stdio.h>
-#include <math.h>
+#include <stdbool.h>
 
+// Define the coefficients of the elliptic curve equation: y^2 = x^3 + ax + b
+#define A 1
+#define B 1
+
+// Define the prime number for the finite field
+#define P 13
+
+// Define a structure to represent a point on the elliptic curve
 typedef struct {
-    int x;
-    int y;
+    int x, y;
 } Point;
 
-int a, b, p; // Curve parameters
-
-// Function to check if a point lies on the curve
-int isPointOnCurve(Point point) {
-    return (int)(pow(point.y, 2) - (pow(point.x, 3) + a * point.x + b)) % p == 0;
+// Function to check if a point is on the elliptic curve
+bool isPointOnCurve(Point point) {
+    int left = (point.y * point.y) % P;
+    int right = ((point.x * point.x * point.x) + (A * point.x) + B) % P;
+    return (left == right);
 }
 
 int main() {
-    printf("Enter the parameters for the elliptic curve (a, b, p): ");
-    scanf("%d %d %d", &a, &b, &p);
+    printf("Points on the elliptic curve y^2 = x^3 + %dx + %d (mod %d):\n", A, B, P);
 
-    printf("Points on the elliptic curve:\n");
-
-    for (int x = 0; x < p; x++) {
-        int y_squared = (int)(pow(x, 3) + a * x + b);
-        int y = (int)(sqrt(abs(y_squared))) % p;
-
-        if (isPointOnCurve((Point){x, y}) || isPointOnCurve((Point){x, -y})) {
-            printf("(%d, %d)\n", x, y);
+    for (int x = 0; x < P; x++) {
+        for (int y = 0; y < P; y++) {
+            Point point = {x, y};
+            if (isPointOnCurve(point)) {
+                printf("(%d, %d)\n", point.x, point.y);
+            }
         }
     }
 
