@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <conio.h> // This library might not be available on all systems
+#include <conio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
