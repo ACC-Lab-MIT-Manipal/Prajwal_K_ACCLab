@@ -1,20 +1,27 @@
-#include<stdio.h>
-#include<conio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<string.h>
+#include <stdio.h>
+#include <conio.h> // This library might not be available on all systems
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 
 long int p, q, n, t, flag, e[100], d[100], temp[100], j, m[100], en[100], i;
 char msg[100];
+
+// Function to check if a number is prime
 int prime(long int);
+
+// Function to calculate the encryption key 'e' and its corresponding decryption key 'd'
 void ce();
 long int cd(long int);
+
+// Functions for encryption and decryption
 void encrypt();
 void decrypt();
+
 void main()
 {
     printf("\nENTER FIRST PRIME NUMBER\n");
-    scanf("%d", &p);
+    scanf("%ld", &p);
     flag = prime(p);
     if (flag == 0)
     {
@@ -23,7 +30,7 @@ void main()
         exit(1);
     }
     printf("\nENTER ANOTHER PRIME NUMBER\n");
-    scanf("%d", &q);
+    scanf("%ld", &q);
     flag = prime(q);
     if (flag == 0 || p == q)
     {
@@ -45,6 +52,7 @@ void main()
     encrypt();
     decrypt();
 }
+
 int prime(long int pr)
 {
     int i;
@@ -52,10 +60,11 @@ int prime(long int pr)
     for (i = 2; i <= j; i++)
     {
         if (pr % i == 0)
-            return 0;
+            return 0; // Not prime
     }
-    return 1;
+    return 1; // Prime
 }
+
 void ce()
 {
     int k;
@@ -67,11 +76,11 @@ void ce()
         flag = prime(i);
         if (flag == 1 && i != p && i != q)
         {
-            e[k] = i;
+            e[k] = i; // Store potential encryption keys 'e'
             flag = cd(e[k]);
             if (flag > 0)
             {
-                d[k] = flag;
+                d[k] = flag; // Store corresponding decryption keys 'd'
                 k++;
             }
             if (k == 99)
@@ -79,6 +88,7 @@ void ce()
         }
     }
 }
+
 long int cd(long int x)
 {
     long int k = 1;
@@ -86,9 +96,10 @@ long int cd(long int x)
     {
         k = k + t;
         if (k % x == 0)
-            return (k / x);
+            return (k / x); // Return the corresponding decryption key 'd'
     }
 }
+
 void encrypt()
 {
     long int pt, ct, key = e[0], k, len;
@@ -114,6 +125,7 @@ void encrypt()
     for (i = 0; en[i] != -1; i++)
         printf("%c", en[i]);
 }
+
 void decrypt()
 {
     long int pt, ct, key = d[0], k;
@@ -128,7 +140,7 @@ void decrypt()
             k = k % n;
         }
         pt = k + 96;
-        m[i] = pt;
+        m[i] = pt + 32; // Convert back to original character code
         i++;
     }
     m[i] = -1;
